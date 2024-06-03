@@ -14,7 +14,6 @@
       max-height: 400px;
       object-fit: cover;
     }
-    
 
     body {
       font-family: Arial, sans-serif;
@@ -125,8 +124,6 @@
       background-color: #e0a922;
       border-radius: 50%;
       color: #e0a922;
-     
-
     }
 
     .slick-dots li.slick-active button:before {
@@ -247,6 +244,12 @@
 
       gsap.registerPlugin(ScrollTrigger);
 
+      // Create a function to handle slide navigation
+      function goToSlide(index) {
+        slickSlider.slick('slickGoTo', index);
+      }
+
+      // Create the timeline
       let tl = gsap.timeline({
         scrollTrigger: {
           trigger: ".slider_container",
@@ -254,17 +257,19 @@
           end: "+=400%",
           scrub: 1,
           pin: true,
-          markers: true
+          onUpdate: self => {
+            const progress = self.progress;
+            const slideIndex = Math.floor(progress * 4); // Assuming there are 4 slides
+            goToSlide(slideIndex);
+          }
         }
       });
 
-      tl
-        .fromTo(".step-button1", {
+      tl.fromTo(".step-button1", {
           boxShadow: "0px 0px 0 0 #e0a922 inset",
         }, {
           boxShadow: "85px 0px 0 0 #e0a922 inset",
-            onComplete: () => slickSlider.slick('slickGoTo', 0)
-          }, 0)
+        }, 0)
         .fromTo(".line1", {
           "--line-before-width": "0%",
         }, {
@@ -274,7 +279,6 @@
           boxShadow: "0px 0px 0 0 #e0a922 inset",
         }, {
           boxShadow: "85px 0px 0 0 #e0a922 inset",
-          onComplete: () => slickSlider.slick('slickGoTo', 1)
         }, ">")
         .fromTo(".line2", {
           "--line-before-width": "0%",
@@ -285,7 +289,6 @@
           boxShadow: "0px 0px 0 0 #e0a922 inset",
         }, {
           boxShadow: "85px 0px 0 0 #e0a922 inset",
-          onComplete: () => slickSlider.slick('slickGoTo', 2)
         }, ">")
         .fromTo(".line3", {
           "--line-before-width": "0%",
@@ -296,7 +299,15 @@
           boxShadow: "0px 0px 0 0 #e0a922 inset",
         }, {
           boxShadow: "85px 0px 0 0 #e0a922 inset",
-          onComplete: () => slickSlider.slick('slickGoTo', 3)
         }, ">");
+
+      // Add event listeners to buttons to handle navigation
+      document.querySelector('.step-button1').addEventListener('click', () => goToSlide(0));
+      document.querySelector('.step-button2').addEventListener('click', () => goToSlide(1));
+      document.querySelector('.step-button3').addEventListener('click', () => goToSlide(2));
+      document.querySelector('.step-button4').addEventListener('click', () => goToSlide(3));
     });
   </script>
+</body>
+
+</html>
